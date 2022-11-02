@@ -84,22 +84,34 @@ class App extends Component{
         this.setState({filter})
     }
 
+    onSalaryChange = (id, newSalary) =>{
+        this.setState(({data}) => ({
+            data : data.map(item => {
+                if (item.id === id){
+                    return {...item, salary: newSalary}
+                }
+                return item;
+            })
+        }));
+    }
+
     render(){   
         const {data, term, filter} = this.state,
             visibleData =  this.filterMethod(this.searchEmp(data, term), filter);
         return (
             <div className='app'>
                 <AppInfo data={data}/>
-  
+
                 <div className="search-panel">
                     <SearchPanel onUpdateSearch={this.onUpdateSearch} />
                     <AppFilter filter= {filter} onFilterSelected={this.onFilterSelected} />
                 </div>
-                
+
                 <EmployeesList 
                     data={visibleData}
                     onDelete = {this.deleteItem} 
                     onToggleProp = {this.onToggleProp}
+                    onSalaryChange = {this.onSalaryChange}
                     />
                 <EmployeesAddForm onAdd ={this.addData} />
             </div>
